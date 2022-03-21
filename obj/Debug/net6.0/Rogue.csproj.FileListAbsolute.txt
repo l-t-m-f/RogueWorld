@@ -1,0 +1,15 @@
+C:\Users\ltmf\source\repos\CSharp\Roguelike\bin\Debug\net6.0\Rogue.exe
+C:\Users\ltmf\source\repos\CSharp\Roguelike\bin\Debug\net6.0\Rogue.deps.json
+C:\Users\ltmf\source\repos\CSharp\Roguelike\bin\Debug\net6.0\Rogue.runtimeconfig.json
+C:\Users\ltmf\source\repos\CSharp\Roguelike\bin\Debug\net6.0\Rogue.dll
+C:\Users\ltmf\source\repos\CSharp\Roguelike\bin\Debug\net6.0\Rogue.pdb
+C:\Users\ltmf\source\repos\CSharp\Roguelike\obj\Debug\net6.0\Rogue.csproj.AssemblyReference.cache
+C:\Users\ltmf\source\repos\CSharp\Roguelike\obj\Debug\net6.0\Rogue.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ltmf\source\repos\CSharp\Roguelike\obj\Debug\net6.0\Rogue.AssemblyInfoInputs.cache
+C:\Users\ltmf\source\repos\CSharp\Roguelike\obj\Debug\net6.0\Rogue.AssemblyInfo.cs
+C:\Users\ltmf\source\repos\CSharp\Roguelike\obj\Debug\net6.0\Rogue.csproj.CoreCompileInputs.cache
+C:\Users\ltmf\source\repos\CSharp\Roguelike\obj\Debug\net6.0\Rogue.dll
+C:\Users\ltmf\source\repos\CSharp\Roguelike\obj\Debug\net6.0\refint\Rogue.dll
+C:\Users\ltmf\source\repos\CSharp\Roguelike\obj\Debug\net6.0\Rogue.pdb
+C:\Users\ltmf\source\repos\CSharp\Roguelike\obj\Debug\net6.0\Rogue.genruntimeconfig.cache
+C:\Users\ltmf\source\repos\CSharp\Roguelike\obj\Debug\net6.0\ref\Rogue.dll
