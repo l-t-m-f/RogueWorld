@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Rogue.Managers;
+using RogueWorld.Managers;
 
-namespace Rogue.GameObjects.Scenery
+namespace RogueWorld.GameObjects.Scenery
 {
     public abstract class Scenery : GameObject
     {
@@ -15,6 +15,13 @@ namespace Rogue.GameObjects.Scenery
         {
             get { return _durability; }
             set { _durability = value; }
+        }
+
+        private bool _solidity;
+        public bool Solidity
+        {
+            get { return _solidity; }
+            set { _solidity = value; }
         }
 
         public Scenery(int x, int y)

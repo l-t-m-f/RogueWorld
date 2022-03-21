@@ -1,34 +1,62 @@
 ﻿using System;
-using Rogue.Managers;
+using RogueWorld.Managers;
 
-namespace Rogue
+namespace RogueWorld
 {
     internal class Program
     {
-        private static GameState _gameState;
 
-        static void Main()
+        public static GameState GameState;
+
+        static void Main(string[] args)
         {
-           Init();
-           while (_gameState == GameState.Continue)
+            Init();
+
+            while (GameState != GameState.GameOver)
             {
-                GameManager.Instance.DrawMap();
-                GameManager.Instance.TakeUserInput();
+                if(GameState == GameState.Menu)
+                {
+                    GameManager.Instance.DrawEngine.DrawMenu();
+                    GameManager.Instance.TakeUserInput();
+                }
+                else if(GameState == GameState.Continue)
+                {
+                    GameManager.Instance.DrawEngine.DrawScenery();
+                    GameManager.Instance.DrawEngine.DrawUnits();
+                    GameManager.Instance.TakeUserInput();
+                    GameManager.Instance.TurnEngine.PlayPlayerTurn();
+                    GameManager.Instance.TurnEngine.PlayAITurn();
+                }
             }
         }
 
         static void Init()
         {
             Console.CursorVisible = false;
-            _gameState = GameState.Continue;
+            GameState = GameState.Menu;
             
             if (OperatingSystem.IsWindows())
             {
                 Console.SetWindowSize(GameManager.COLS, GameManager.ROWS);
-                //Console.WriteLine("Set window {0}, {1}", GameManager.COLS, GameManager.ROWS);
+                Console.WriteLine("Set window {0}, {1}", GameManager.COLS, GameManager.ROWS);
             }
 
-            GameManager.Instance.PrintLog(" ");
+            GameManager.Instance.LogsEngine.PrintLog(" ");
         }
-    } 
+    }
+
+    public enum GameState
+    {
+        Menu,
+        Continue,
+        GameOver
+    }
+
+    public enum Directions
+    {
+        Up,
+        Left,
+        Down,
+        Right
+    }
 }

@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Rogue.GameObjects.Units
+namespace RogueWorld.GameObjects.Units
 {
     public class Unit_Rogue : Unit
     {
 
         public Unit_Rogue(int x, int y) : base(x, y)
         {
-            Symbol = 'P';
+            Symbol = '@';
             Name = "Rogue";
             Health = 10;
         }

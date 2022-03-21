@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Rogue.GameObjects.Units;
+using RogueWorld.GameObjects.Units;
 
-namespace Rogue.GameObjects
+namespace RogueWorld.GameObjects
 {
     public abstract class GameObject
     {
@@ -14,5 +14,8 @@ namespace Rogue.GameObjects
         public char Symbol;
         public int PositionX;
         public int PositionY;
+        public ConsoleColor FgColor = ConsoleColor.White;
+        public ConsoleColor BgColor = ConsoleColor.Black;
+
     }
 }

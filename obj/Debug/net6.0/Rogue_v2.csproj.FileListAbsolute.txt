@@ -1,0 +1,15 @@
+D:\Dev\Projects\VisualStudio\CSharp\Roguelike_v2\obj\Debug\net6.0\Rogue_v2.csproj.AssemblyReference.cache
+D:\Dev\Projects\VisualStudio\CSharp\Roguelike_v2\obj\Debug\net6.0\Rogue_v2.GeneratedMSBuildEditorConfig.editorconfig
+D:\Dev\Projects\VisualStudio\CSharp\Roguelike_v2\obj\Debug\net6.0\Rogue_v2.AssemblyInfoInputs.cache
+D:\Dev\Projects\VisualStudio\CSharp\Roguelike_v2\obj\Debug\net6.0\Rogue_v2.AssemblyInfo.cs
+D:\Dev\Projects\VisualStudio\CSharp\Roguelike_v2\obj\Debug\net6.0\Rogue_v2.csproj.CoreCompileInputs.cache
+D:\Dev\Projects\VisualStudio\CSharp\Roguelike_v2\bin\Debug\net6.0\Rogue_v2.exe
+D:\Dev\Projects\VisualStudio\CSharp\Roguelike_v2\bin\Debug\net6.0\Rogue_v2.deps.json
+D:\Dev\Projects\VisualStudio\CSharp\Roguelike_v2\bin\Debug\net6.0\Rogue_v2.runtimeconfig.json
+D:\Dev\Projects\VisualStudio\CSharp\Roguelike_v2\bin\Debug\net6.0\Rogue_v2.dll
+D:\Dev\Projects\VisualStudio\CSharp\Roguelike_v2\bin\Debug\net6.0\Rogue_v2.pdb
+D:\Dev\Projects\VisualStudio\CSharp\Roguelike_v2\obj\Debug\net6.0\Rogue_v2.dll
+D:\Dev\Projects\VisualStudio\CSharp\Roguelike_v2\obj\Debug\net6.0\refint\Rogue_v2.dll
+D:\Dev\Projects\VisualStudio\CSharp\Roguelike_v2\obj\Debug\net6.0\Rogue_v2.pdb
+D:\Dev\Projects\VisualStudio\CSharp\Roguelike_v2\obj\Debug\net6.0\Rogue_v2.genruntimeconfig.cache
+D:\Dev\Projects\VisualStudio\CSharp\Roguelike_v2\obj\Debug\net6.0\ref\Rogue_v2.dll

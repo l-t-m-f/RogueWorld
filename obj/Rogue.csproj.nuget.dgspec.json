@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Dev\\Projects\\VisualStudio\\CSharp\\Roguelike\\Rogue.csproj": {}
+    "D:\\Dev\\Projects\\VisualStudio\\CSharp\\Roguelike_v2\\Rogue.csproj": {}
   },
   "projects": {
-    "D:\\Dev\\Projects\\VisualStudio\\CSharp\\Roguelike\\Rogue.csproj": {
+    "D:\\Dev\\Projects\\VisualStudio\\CSharp\\Roguelike_v2\\Rogue.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Dev\\Projects\\VisualStudio\\CSharp\\Roguelike\\Rogue.csproj",
+        "projectUniqueName": "D:\\Dev\\Projects\\VisualStudio\\CSharp\\Roguelike_v2\\Rogue.csproj",
         "projectName": "Rogue",
-        "projectPath": "D:\\Dev\\Projects\\VisualStudio\\CSharp\\Roguelike\\Rogue.csproj",
+        "projectPath": "D:\\Dev\\Projects\\VisualStudio\\CSharp\\Roguelike_v2\\Rogue.csproj",
         "packagesPath": "C:\\Users\\ltmf\\.nuget\\packages\\",
-        "outputPath": "D:\\Dev\\Projects\\VisualStudio\\CSharp\\Roguelike\\obj\\",
+        "outputPath": "D:\\Dev\\Projects\\VisualStudio\\CSharp\\Roguelike_v2\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\ltmf\\AppData\\Roaming\\NuGet\\NuGet.Config",

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Rogue.GameObjects.Scenery
+namespace RogueWorld.GameObjects.Scenery
 {
     public class Scenery_Ground : Scenery
     {

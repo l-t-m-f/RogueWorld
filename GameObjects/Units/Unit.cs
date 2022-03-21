@@ -4,15 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Rogue.Managers;
+using RogueWorld.Managers;
 
-namespace Rogue.GameObjects.Units
+namespace RogueWorld.GameObjects.Units
 {
     public abstract class Unit : GameObject
     {
         private int _health;
         public int Health { get { return _health; }
             set { _health = value; } }
+
+        public Directions Direction;
 
         public Unit(int x, int y)
         {

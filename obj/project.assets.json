@@ -8,26 +8,24 @@
     "net6.0": []
   },
   "packageFolders": {
-    "C:\\Users\\ltmf\\.nuget\\packages\\": {}
+    "/home/ltmf/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Dev\\Projects\\VisualStudio\\CSharp\\Roguelike\\RogueTestV1.csproj",
-      "projectName": "RogueTestV1",
-      "projectPath": "D:\\Dev\\Projects\\VisualStudio\\CSharp\\Roguelike\\RogueTestV1.csproj",
-      "packagesPath": "C:\\Users\\ltmf\\.nuget\\packages\\",
-      "outputPath": "D:\\Dev\\Projects\\VisualStudio\\CSharp\\Roguelike\\obj\\",
+      "projectUniqueName": "/home/ltmf/Documents/GitHub/RogueTestV1CSharp/RogueWorld.csproj",
+      "projectName": "RogueWorld",
+      "projectPath": "/home/ltmf/Documents/GitHub/RogueTestV1CSharp/RogueWorld.csproj",
+      "packagesPath": "/home/ltmf/.nuget/packages/",
+      "outputPath": "/home/ltmf/Documents/GitHub/RogueTestV1CSharp/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\ltmf\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "/home/ltmf/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net6.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -60,7 +58,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.201\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/6.0.200/RuntimeIdentifierGraph.json"
       }
     }
   }

@@ -4,149 +4,97 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Rogue.GameObjects;
-using Rogue.GameObjects.Scenery;
-using Rogue.GameObjects.Units;
+using RogueWorld.GameObjects;
+using RogueWorld.GameObjects.Scenery;
+using RogueWorld.GameObjects.Units;
 
-namespace Rogue.Managers
+namespace RogueWorld.Managers
 {
-    public sealed class GameManager
+    internal class GameManager
     {
-        // Singleton
 
-        private static readonly Lazy<GameManager> lazy = 
+        private static readonly Lazy<GameManager> lazy =
             new Lazy<GameManager>(() => new GameManager());
 
         public static GameManager Instance { get { return lazy.Value; } }
 
-        //
-
         public const int COLS = 160;
         public const int ROWS = 45;
+       
+        public UnitEngine UnitEngine;
+        public DrawEngine DrawEngine;
+        public TurnEngine TurnEngine;
+        public LogsEngine LogsEngine;
 
-        private Scenery[,] _sceneryMap;
-        private Unit[,] _unitMap;
+        public List<GameObject> GameObjects;
 
-        public UnitManager UnitManager;
+        public static ConsoleKey LastKey;
 
         private GameManager()
         {
-            InitMap();
-            UnitManager = new UnitManager();
-            // Put the Rogue player in the map (it's created as part of new UnitManager(); ) 
-            UpdateUnitMap(UnitManager.Rogue);
-        }
+            GameObjects = new List<GameObject>();
 
-        private int InitMap()
-        {
+            UnitEngine = new UnitEngine();
+            DrawEngine = new DrawEngine();
+            TurnEngine = new TurnEngine();
+            LogsEngine = new LogsEngine();
 
-            _sceneryMap = new Scenery[COLS, ROWS];
-            _unitMap = new Unit[COLS, ROWS];
+            DrawEngine.InitMap();
 
-            for (int x = 0; x < COLS; x++)
-            {
-                for (int y = 0; y < ROWS; y++)
-                {
-                    UpdateSceneryMap(new Scenery_Ground(x, y));
-                }
-            }
-
-            return 0;
-        }
-
-        public int UpdateSceneryMap(Scenery scenery)
-        {
-
-            _sceneryMap[scenery.PositionX, scenery.PositionY] = scenery;
-
-            return 0;
-        }
-
-        public int UpdateUnitMap(Unit unit)
-        {
-
-            _unitMap[unit.PositionX, unit.PositionY] = unit;
-
-            return 0;
-        }
-
-        public int ClearUnitMap(Unit unit)
-        {
-            _unitMap[unit.PositionX, unit.PositionY] = null;
-
-            return 0;
-        }
-
-        public int DrawMap()
-        {
-            for (int x = 0; x < COLS; x++)
-            {
-                for (int y = 0; y < ROWS-1; y++)
-                {
-                    Console.SetCursorPosition(x, y);
-
-                    if (_unitMap[x, y] != null)
-                    {
-                        Console.Write(_unitMap[x, y].Symbol);
-                    }
-                    else if (_sceneryMap[x, y] != null)
-                    {
-                        Console.Write(_sceneryMap[x, y].Symbol);
-                    }
-                    
-                }
-            }
-
-            return 0;
+            DrawEngine.AddObject(DrawEngine.UnitMap, UnitEngine.Rogue);
+            DrawEngine.AddObject(DrawEngine.UnitMap, UnitEngine.Kobold, GameObjects);
+            DrawEngine.AddObject(DrawEngine.SceneryMap, new Scenery_Boulder(10, 20));
+            DrawEngine.AddObject(DrawEngine.SceneryMap, new Scenery_Boulder(17, 21));
+            DrawEngine.AddObject(DrawEngine.SceneryMap, new Scenery_Boulder(20, 15));
         }
 
         DateTime lastPressedTime = DateTime.MinValue;
-        public static ConsoleKey LastKey;
 
         public void TakeUserInput()
         {
             LastKey = Console.ReadKey(true).Key;
 
-            if (DateTime.Now > lastPressedTime.AddSeconds(.1))
+            if (DateTime.Now > lastPressedTime.AddSeconds(.01))
             {
-                
-                if (LastKey == ConsoleKey.UpArrow)
+                if (Program.GameState == GameState.Menu)
                 {
-                    UnitManager.MoveUnitBy(UnitManager.Rogue, 0, -1);
-                    PrintLog("Player moved to " + UnitManager.Rogue.PositionX + ", " + UnitManager.Rogue.PositionY);
+
+                    if (LastKey == ConsoleKey.UpArrow)
+                    {
+                        GameManager.Instance.DrawEngine.DecrementButtonSelection();
+                    }
+                    else if (LastKey == ConsoleKey.DownArrow)
+                    {
+                        GameManager.Instance.DrawEngine.IncrementButtonSelection();
+                    }
+                    else if (LastKey == ConsoleKey.Spacebar)
+                    {
+                        GameManager.Instance.DrawEngine.ActivateButtonSelection();
+                    }
+
                 }
-                else if (LastKey == ConsoleKey.LeftArrow)
+                else if (Program.GameState == GameState.Continue)
                 {
-                    UnitManager.MoveUnitBy(UnitManager.Rogue, -1, 0);
-                    PrintLog("Player moved to " + UnitManager.Rogue.PositionX + ", " + UnitManager.Rogue.PositionY);
-                }
-                else if (LastKey == ConsoleKey.DownArrow)
-                {
-                    UnitManager.MoveUnitBy(UnitManager.Rogue, 0, 1);
-                    PrintLog("Player moved to " + UnitManager.Rogue.PositionX + ", " + UnitManager.Rogue.PositionY);
-                }
-                else if (LastKey == ConsoleKey.RightArrow)
-                {
-                    UnitManager.MoveUnitBy(UnitManager.Rogue, 1, 0);
-                    PrintLog("Player moved to " + UnitManager.Rogue.PositionX + ", " + UnitManager.Rogue.PositionY);
+                    if (LastKey == ConsoleKey.UpArrow)
+                    {
+                        UnitEngine.Rogue.Direction = Directions.Up;
+                    }
+                    else if (LastKey == ConsoleKey.LeftArrow)
+                    {
+                        UnitEngine.Rogue.Direction = Directions.Left;
+                    }
+                    else if (LastKey == ConsoleKey.DownArrow)
+                    {
+                        UnitEngine.Rogue.Direction = Directions.Down;
+                    }
+                    else if (LastKey == ConsoleKey.RightArrow)
+                    {
+                        UnitEngine.Rogue.Direction = Directions.Right;
+                    }
                 }
 
                 lastPressedTime = DateTime.Now;
             }
         }
-
-
-        public void PrintLog(string logContent)
-        {
-            Console.SetCursorPosition(0, ROWS - 1);
-            Console.Write("Log: " + logContent);
-        }
-    }
-
-    public enum GameState
-    {
-        Menu,
-        Continue,
-        GameOver
     }
 }
