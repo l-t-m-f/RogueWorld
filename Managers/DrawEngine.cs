@@ -19,7 +19,8 @@ namespace RogueWorld.Managers
         to reset console colors after use. */
         public void Write(object text, 
         int x, int y, 
-        ConsoleColor FgColor, ConsoleColor BgColor, bool reset = true)
+        ConsoleColor FgColor = ConsoleColor.White, ConsoleColor BgColor = ConsoleColor.Black, 
+        bool reset = true)
         {
             Console.SetCursorPosition(x, y);
             Console.ForegroundColor = FgColor;
@@ -192,7 +193,6 @@ namespace RogueWorld.Managers
         {
 
             objectMap[gameObject.PositionX, gameObject.PositionY] = null;
-
             return 0;
         }
 

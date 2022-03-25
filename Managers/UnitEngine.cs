@@ -28,38 +28,56 @@ namespace RogueWorld.Managers
         /// <param name="gameObject">New GameObject to be placed. 
         /// The object should already have been initialized elsewhere with coordinates.</param>
         /// <returns></returns>
-
-        internal void MoveUnitBy(Unit unit, int x, int y)
-        {
+        internal void MoveUnitBy(Unit unit, int x, int y) {
 
             int newX = unit.PositionX + x;
             int newY = unit.PositionY + y;
 
-            if(newX < GameManager.COLS-1 && newX > 1 && newY < GameManager.ROWS-1 && newY > 1) {
-                if(CheckCellForEnemy(newX, newY) == true ) {
-                    if(GameManager.Instance.DrawEngine.UnitMap[newX, newY].Faction != unit.Faction) {
+            // Make sur the new position is not "out-of-bounds":
+            if (newX < GameManager.COLS-1 && newX > 1 && 
+                newY < GameManager.ROWS-1 && newY > 1) {
+
+                // If new position already contains a unit.
+                if (CheckCellForUnit(newX, newY) == true) {
+
+                    // Verify if the unit is of a different "faction".
+                    // If so, it is an enemy. Therefore, attack it.
+                    if (GameManager.Instance.DrawEngine.UnitMap[newX, newY].Faction != unit.Faction) {
+
+                        GameManager.Instance.LogsEngine.PrintLog("Player attacked to "
+                            + newX + ", " + newY + "(" +
+                            GameManager.Instance.DrawEngine.UnitMap[newX, newY].Health + "/ 3)",
+                            ConsoleColor.Red, ConsoleColor.Black);
                         DealDamageToUnit(GameManager.Instance.DrawEngine.UnitMap[newX, newY]);
-                        GameManager.Instance.LogsEngine.PrintLog("Player attacked to " + newX + ", " + newY + "(" +
-                        GameManager.Instance.DrawEngine.UnitMap[newX, newY].Health+ "/ 3)");
                     }
-                }
-                else if(CheckIfClearIsCell(newX, newY) == true)
-                {
+                // If the new position doesn't contain a unit, check if it contains a solid scenery.
+                // If its clear, allow the movement.
+                } else if(CheckIfClearIsCell(newX, newY) == true) {
+
                     GameManager.Instance.DrawEngine.EraseObject(GameManager.Instance.DrawEngine.UnitMap, unit);
                     GameManager.Instance.DrawEngine.DrawScenery(unit.PositionX, unit.PositionY);
+
                     unit.PositionX = newX;
                     unit.PositionY = newY;
+
                     GameManager.Instance.DrawEngine.AddObject(GameManager.Instance.DrawEngine.UnitMap, unit);
                     GameManager.Instance.DrawEngine.DrawUnits(unit.PositionX, unit.PositionY);
+
                     if(unit.Name == "Player") {
-                        GameManager.Instance.LogsEngine.PrintLog("Player moved to " + newX + ", " + newY);
+                        GameManager.Instance.LogsEngine.PrintLog("Player moved to " + newX + ", " + newY,
+                            ConsoleColor.White, ConsoleColor.Black);
                     }
                 }
-
             }
         }
 
-        internal bool CheckCellForEnemy(int x, int y) {
+        /// <summary>
+        /// Checks if a targeted cell contains a unit. Returns true / false.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        internal bool CheckCellForUnit(int x, int y) {
 
             if(GameManager.Instance.DrawEngine.UnitMap[x, y] == null) {
 
@@ -72,6 +90,17 @@ namespace RogueWorld.Managers
 
         internal void DealDamageToUnit(Unit unit) {
             unit.Health--;
+            if(unit.Health == 0)
+            {
+                GameManager.Instance.DrawEngine.EraseObject(GameManager.Instance.DrawEngine.UnitMap,
+                    unit);
+                GameManager.Instance.GameObjects.Remove(unit);
+            }
+        }
+
+        internal void KillUnit(Unit unit)
+        {
+            GameManager.Instance.GameObjects.Remove(unit);
         }
 
         internal bool CheckIfClearIsCell(int x, int y)
@@ -97,7 +126,8 @@ namespace RogueWorld.Managers
                 GameManager.Instance.DrawEngine.AddObject(GameManager.Instance.DrawEngine.UnitMap, unit);
                 GameManager.Instance.DrawEngine.DrawUnits(unit.PositionX, unit.PositionY);
                 if(unit.Name == "Player") {
-                    GameManager.Instance.LogsEngine.PrintLog("Player moved to " + unit.PositionX + ", " + unit.PositionY);
+                    GameManager.Instance.LogsEngine.PrintLog("Player moved to " + unit.PositionX + ", " + unit.PositionY,
+                        ConsoleColor.White, ConsoleColor.Black);
                 }
             }
         }

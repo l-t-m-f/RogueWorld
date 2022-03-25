@@ -30,17 +30,31 @@ namespace RogueWorld.Managers
             }
         }
 
+        internal bool FightResolution()
+        {
+
+            var update = false;
+
+            foreach (Unit unit in GameManager.Instance.GameObjects)
+            {
+
+                if (unit.Health <= 0)
+                {
+                    GameManager.Instance.DrawEngine.EraseObject(GameManager.Instance.DrawEngine.UnitMap,
+                    unit);
+                    //GameManager.Instance.UnitEngine.KillUnit(unit);
+                    update = true;
+                }
+            }
+
+            return update;
+        }
+
         internal void PlayAITurn()
         {
 
             foreach (Unit unit in GameManager.Instance.GameObjects)
             {
-
-                if(unit.Health == 0) {
-                    GameManager.Instance.DrawEngine.EraseObject(GameManager.Instance.DrawEngine.UnitMap,
-                    unit);
-                } else {
- 
                     var x = 0;
                     var y = 0;
 
@@ -55,7 +69,6 @@ namespace RogueWorld.Managers
                     
                     GameManager.Instance.UnitEngine.MoveUnitBy(unit, x, y);
 
-                }
             }
         }
     }

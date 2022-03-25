@@ -25,6 +25,12 @@ namespace RogueWorld
                     GameManager.Instance.DrawEngine.DrawUnits();
                     GameManager.Instance.TakeUserInput();
                     GameManager.Instance.TurnEngine.PlayPlayerTurn();
+                    /*
+                    if (GameManager.Instance.TurnEngine.FightResolution())
+                    {
+                        GameManager.Instance.DrawEngine.DrawUnits();
+                    }
+                    */
                     GameManager.Instance.TurnEngine.PlayAITurn();
                 }
             }
@@ -41,7 +47,7 @@ namespace RogueWorld
                 Console.WriteLine("Set window {0}, {1}", GameManager.COLS, GameManager.ROWS);
             }
 
-            GameManager.Instance.LogsEngine.PrintLog(" ");
+            //GameManager.Instance.LogsEngine.PrintLog(" ");
         }
     }
 
