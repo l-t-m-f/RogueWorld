@@ -11,6 +11,7 @@ namespace RogueWorld.GameObjects.Units
 
         public Unit_Kobold(int x, int y) : base(x, y)
         {
+            Faction = 1;
             Symbol = 'k';
             Name = "Kobold";
             Health = 3;

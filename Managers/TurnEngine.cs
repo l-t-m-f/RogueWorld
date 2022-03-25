@@ -35,10 +35,27 @@ namespace RogueWorld.Managers
 
             foreach (Unit unit in GameManager.Instance.GameObjects)
             {
-                Random random = new Random();
-                var x = random.Next(-1, 2);
-                var y = random.Next(-1, 2);
-                GameManager.Instance.UnitEngine.MoveUnitBy(unit, x, y);
+
+                if(unit.Health == 0) {
+                    GameManager.Instance.DrawEngine.EraseObject(GameManager.Instance.DrawEngine.UnitMap,
+                    unit);
+                } else {
+ 
+                    var x = 0;
+                    var y = 0;
+
+                    Random random = new Random();
+                    if(random.Next(2) == 0) {
+                        random = new Random();
+                        x = random.Next(-1, 2);
+                    } else {
+                        random = new Random();
+                        y = random.Next(-1, 2);
+                    }
+                    
+                    GameManager.Instance.UnitEngine.MoveUnitBy(unit, x, y);
+
+                }
             }
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,9 +13,13 @@ namespace RogueWorld.Managers
 {
     internal class DrawEngine
     {
-        // NEW (NOT PRESENTED IN CLASS) : Generic colored console handler
 
-        public void Write(object text, int x, int y, ConsoleColor FgColor, ConsoleColor BgColor, bool reset = true)
+        /* Write-to-console helper function 
+        Supports colors and cursor position. Use the reset bool
+        to reset console colors after use. */
+        public void Write(object text, 
+        int x, int y, 
+        ConsoleColor FgColor, ConsoleColor BgColor, bool reset = true)
         {
             Console.SetCursorPosition(x, y);
             Console.ForegroundColor = FgColor;
@@ -27,12 +32,20 @@ namespace RogueWorld.Managers
             }
         }
 
-
-        // NEW (NOT PRESENTED IN CLASS) : Drawing the menu
-
         private int _currentButton = -1;
         readonly int ButtonMax = 2;
         readonly int xOffset = 10;
+
+        public List<MenuButton> buttons;
+
+        public struct MenuButton {
+            public int Id;
+            public string Label;
+            public int yOffset;
+        }
+        public void InitMenu() {
+            buttons = new List<MenuButton>();
+        }
         public void DrawMenu()
         {
             Console.Clear();
@@ -46,23 +59,34 @@ namespace RogueWorld.Managers
         }
         private void DrawLogo()
         {
+
             Write("ROGUE WORLD", 
                 GameManager.COLS / 2 - xOffset, 5, 
                 ConsoleColor.DarkRed, ConsoleColor.Black);
         }
         
-        private void DrawButtons(int buttonYOffset, string buttonText)
+        private void CreateButton(int buttonId, string buttonText, int buttonYOffset = 0) {
+            MenuButton newButton = new MenuButton();
+            newButton.Id = buttonId;
+            newButton.Label = buttonText;
+            newButton.yOffset = buttonYOffset;
+            buttons.Add(newButton);
+
+        }
+
+        private void DrawButtons(int buttonId, string buttonText, int buttonYOffset = 0)
         {
-            if (buttonYOffset == _currentButton)
+
+            if (buttonId == _currentButton)
             {
                 Write(buttonText,
-                      GameManager.COLS / 2 - xOffset, GameManager.ROWS - 10 + buttonYOffset,
+                      GameManager.COLS / 2 - xOffset, GameManager.ROWS - 10 + buttonId + buttonYOffset,
                       ConsoleColor.Black, ConsoleColor.White);
 
             } else
             {
                 Write(buttonText,
-                    GameManager.COLS / 2 - xOffset, GameManager.ROWS - 10 + buttonYOffset,
+                    GameManager.COLS / 2 - xOffset, GameManager.ROWS - 10 + buttonId + buttonYOffset,
                     ConsoleColor.DarkGray, ConsoleColor.Black);
             }
         }

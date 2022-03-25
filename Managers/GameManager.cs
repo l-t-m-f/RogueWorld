@@ -18,8 +18,8 @@ namespace RogueWorld.Managers
 
         public static GameManager Instance { get { return lazy.Value; } }
 
-        public const int COLS = 160;
-        public const int ROWS = 45;
+        public const int COLS = 90;
+        public const int ROWS = 35;
        
         public UnitEngine UnitEngine;
         public DrawEngine DrawEngine;

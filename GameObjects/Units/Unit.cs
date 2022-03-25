@@ -13,6 +13,7 @@ namespace RogueWorld.GameObjects.Units
         private int _health;
         public int Health { get { return _health; }
             set { _health = value; } }
+        public int Faction;
 
         public Directions Direction;
 

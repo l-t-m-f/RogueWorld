@@ -11,8 +11,9 @@ namespace RogueWorld.GameObjects.Units
 
         public Unit_Rogue(int x, int y) : base(x, y)
         {
+            Faction = 0;
             Symbol = '@';
-            Name = "Rogue";
+            Name = "Player";
             Health = 10;
         }
     }
