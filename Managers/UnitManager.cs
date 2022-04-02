@@ -4,21 +4,50 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using RogueWorld.Utilities;
 using RogueWorld.GameObjects;
 using RogueWorld.GameObjects.Units;
 
 namespace RogueWorld.Managers
 {
-    internal class UnitEngine
+    internal class UnitManager
     {
 
         public Unit_Rogue Rogue;
         public Unit_Kobold Kobold;
 
-        public UnitEngine()
+        public UnitManager()
         {
             Rogue = new Unit_Rogue(40, 20);
             Kobold = new Unit_Kobold(50, 30);
+        }
+
+        // Draw units -- NEW FOR CLASS: Now uses the Write helper method we made earlier.
+
+        internal void DrawUnits(int x, int y)
+        {
+            if (GameManager.Instance.UnitMap[x, y] != null)
+            {
+                Util.Write(GameManager.Instance.UnitMap[x, y].Symbol,
+                    x, y,
+                    GameManager.Instance.UnitMap[x, y].FgColor, GameManager.Instance.UnitMap[x, y].BgColor);
+            }
+        }
+
+        internal void DrawUnits()
+        {
+            for (int x = 0; x < GameManager.COLS; x++)
+            {
+                for (int y = 0; y < GameManager.ROWS - 1; y++)
+                {
+                    if (GameManager.Instance.UnitMap[x, y] != null)
+                    {
+                        Util.Write(GameManager.Instance.UnitMap[x, y].Symbol,
+                            x, y,
+                            GameManager.Instance.UnitMap[x, y].FgColor, GameManager.Instance.UnitMap[x, y].BgColor);
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -42,29 +71,29 @@ namespace RogueWorld.Managers
 
                     // Verify if the unit is of a different "faction".
                     // If so, it is an enemy. Therefore, attack it.
-                    if (GameManager.Instance.DrawEngine.UnitMap[newX, newY].Faction != unit.Faction) {
+                    if (GameManager.Instance.UnitMap[newX, newY].Faction != unit.Faction) {
 
-                        GameManager.Instance.LogsEngine.PrintLog("Player attacked to "
+                        GameManager.Instance.GUIManager.PrintLog("Player attacked to "
                             + newX + ", " + newY + "(" +
-                            GameManager.Instance.DrawEngine.UnitMap[newX, newY].Health + "/ 3)",
+                            GameManager.Instance.UnitMap[newX, newY].Stats.Health + "/ 3)",
                             ConsoleColor.Red, ConsoleColor.Black);
-                        DealDamageToUnit(GameManager.Instance.DrawEngine.UnitMap[newX, newY]);
+                        DealDamageToUnit(GameManager.Instance.UnitMap[newX, newY]);
                     }
                 // If the new position doesn't contain a unit, check if it contains a solid scenery.
                 // If its clear, allow the movement.
                 } else if(CheckIfClearIsCell(newX, newY) == true) {
 
-                    GameManager.Instance.DrawEngine.EraseObject(GameManager.Instance.DrawEngine.UnitMap, unit);
-                    GameManager.Instance.DrawEngine.DrawScenery(unit.PositionX, unit.PositionY);
+                    GameManager.Instance.EraseObject(GameManager.Instance.UnitMap, unit);
+                    GameManager.Instance.DrawStaticObject(unit.PositionX, unit.PositionY);
 
                     unit.PositionX = newX;
                     unit.PositionY = newY;
 
-                    GameManager.Instance.DrawEngine.AddObject(GameManager.Instance.DrawEngine.UnitMap, unit);
-                    GameManager.Instance.DrawEngine.DrawUnits(unit.PositionX, unit.PositionY);
+                    GameManager.Instance.AddObject(GameManager.Instance.UnitMap, unit);
+                    GameManager.Instance.UnitManager.DrawUnits(unit.PositionX, unit.PositionY);
 
                     if(unit.Name == "Player") {
-                        GameManager.Instance.LogsEngine.PrintLog("Player moved to " + newX + ", " + newY,
+                        GameManager.Instance.GUIManager.PrintLog("Player moved to " + newX + ", " + newY,
                             ConsoleColor.White, ConsoleColor.Black);
                     }
                 }
@@ -79,7 +108,7 @@ namespace RogueWorld.Managers
         /// <returns></returns>
         internal bool CheckCellForUnit(int x, int y) {
 
-            if(GameManager.Instance.DrawEngine.UnitMap[x, y] == null) {
+            if(GameManager.Instance.UnitMap[x, y] == null) {
 
                 return false;
 
@@ -89,24 +118,28 @@ namespace RogueWorld.Managers
         }
 
         internal void DealDamageToUnit(Unit unit) {
-            unit.Health--;
-            if(unit.Health == 0)
+
+            var T = GameManager.Instance.TurnManager;
+
+            unit.Stats.Health--;
+            if(unit.Stats.Health == 0)
             {
-                GameManager.Instance.DrawEngine.EraseObject(GameManager.Instance.DrawEngine.UnitMap,
+                GameManager.Instance.EraseObject(GameManager.Instance.UnitMap,
                     unit);
-                GameManager.Instance.GameObjects.Remove(unit);
+                T.TurnUnits.Remove(unit);
             }
         }
 
         internal void KillUnit(Unit unit)
         {
-            GameManager.Instance.GameObjects.Remove(unit);
+            var T = GameManager.Instance.TurnManager;
+            T.TurnUnits.Remove(unit);
         }
 
         internal bool CheckIfClearIsCell(int x, int y)
         {
 
-            if(GameManager.Instance.DrawEngine.SceneryMap[x, y].Solidity == false)
+            if(GameManager.Instance.SceneryMap[x, y].Solidity == false)
             {
                 return true;
             } else
@@ -119,14 +152,14 @@ namespace RogueWorld.Managers
         {
             if (CheckIfClearIsCell(x, y) == true)
             {
-                GameManager.Instance.DrawEngine.EraseObject(GameManager.Instance.DrawEngine.UnitMap, unit);
-                GameManager.Instance.DrawEngine.DrawScenery(unit.PositionX, unit.PositionY);
+                GameManager.Instance.EraseObject(GameManager.Instance.UnitMap, unit);
+                GameManager.Instance.DrawStaticObject(unit.PositionX, unit.PositionY);
                 unit.PositionX = x;
                 unit.PositionY = y;
-                GameManager.Instance.DrawEngine.AddObject(GameManager.Instance.DrawEngine.UnitMap, unit);
-                GameManager.Instance.DrawEngine.DrawUnits(unit.PositionX, unit.PositionY);
+                GameManager.Instance.AddObject(GameManager.Instance.UnitMap, unit);
+                GameManager.Instance.UnitManager.DrawUnits(unit.PositionX, unit.PositionY);
                 if(unit.Name == "Player") {
-                    GameManager.Instance.LogsEngine.PrintLog("Player moved to " + unit.PositionX + ", " + unit.PositionY,
+                    GameManager.Instance.GUIManager.PrintLog("Player moved to " + unit.PositionX + ", " + unit.PositionY,
                         ConsoleColor.White, ConsoleColor.Black);
                 }
             }

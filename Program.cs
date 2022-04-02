@@ -1,43 +1,44 @@
 ﻿using System;
 using RogueWorld.Managers;
 
-namespace RogueWorld
-{
-    internal class Program
-    {
+namespace RogueWorld {
+    internal class Program {
 
         public static GameState GameState;
 
-        static void Main(string[] args)
-        {
+        static void Main(string[] args) {
             Init();
 
-            while (GameState != GameState.GameOver)
-            {
-                if(GameState == GameState.Menu)
-                {
-                    GameManager.Instance.DrawEngine.DrawMenu();
-                    GameManager.Instance.TakeUserInput();
-                }
-                else if(GameState == GameState.Continue)
-                {
-                    GameManager.Instance.DrawEngine.DrawScenery();
-                    GameManager.Instance.DrawEngine.DrawUnits();
-                    GameManager.Instance.TakeUserInput();
-                    GameManager.Instance.TurnEngine.PlayPlayerTurn();
+            var GUI = GameManager.Instance.GUIManager;
+            var U = GameManager.Instance.UnitManager;
+            var T = GameManager.Instance.TurnManager;
+
+            while (GameState != GameState.GameOver) {
+
+                if(GameState == GameState.Menu) {
+
+                    GUI.DrawMenu();
+                    T.TakeUserInput();
+
+                } else if(GameState == GameState.Continue) {
+
+                    GameManager.Instance.DrawStaticObjects();
+                    U.DrawUnits();
+                    GUI.statsGUI.DrawGUI();
+                    T.TakeUserInput();
+                    T.PlayPlayerTurn();
                     /*
-                    if (GameManager.Instance.TurnEngine.FightResolution())
+                    if (T.FightResolution())
                     {
-                        GameManager.Instance.DrawEngine.DrawUnits();
+                        U.DrawUnits();
                     }
-                    */
-                    GameManager.Instance.TurnEngine.PlayAITurn();
+                    */ 
+                    T.PlayAITurn();
                 }
             }
         }
 
-        static void Init()
-        {
+        static void Init() {
             Console.CursorVisible = false;
             GameState = GameState.Menu;
             
