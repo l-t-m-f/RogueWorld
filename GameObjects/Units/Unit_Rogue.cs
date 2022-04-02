@@ -14,7 +14,6 @@ namespace RogueWorld.GameObjects.Units
             Faction = 0;
             Symbol = '@';
             Name = "Player";
-            Health = 10;
         }
     }
 }

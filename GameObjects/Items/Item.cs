@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RogueWorld.Managers
+namespace RogueWorld.GameObjects.Items
 {
-    internal class LogsEngine
+    internal class Item
     {
-        
     }
 }

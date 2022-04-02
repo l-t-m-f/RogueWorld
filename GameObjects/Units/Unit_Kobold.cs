@@ -14,7 +14,6 @@ namespace RogueWorld.GameObjects.Units
             Faction = 1;
             Symbol = 'k';
             Name = "Kobold";
-            Health = 3;
             FgColor = ConsoleColor.Red;
         }
     }
