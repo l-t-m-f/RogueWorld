@@ -10,6 +10,8 @@ namespace RogueWorld.GUI
 {
     internal abstract class GUI
     {
+        // Window title
+        public string Title { get; set; }
 
         // Position and size
         public Point Origin { get; set; }
