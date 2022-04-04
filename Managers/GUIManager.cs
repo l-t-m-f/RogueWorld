@@ -15,12 +15,10 @@ namespace RogueWorld.Managers
         public GUI_Stats statsGUI;
 
         public GUIManager() {
-<<<<<<< HEAD
+
             statsGUI = new GUI_Stats(GameManager.COLS - 31, GameManager.ROWS - 7, 
                 30, 5);
-=======
-            statsGUI = new GUI_Stats(GameManager.COLS - 21, GameManager.ROWS - 7, 20, 5);
->>>>>>> c69185d1dafffea79cb5321aae18ff5a368b0f9b
+
         }
 
         #region MainMenu
