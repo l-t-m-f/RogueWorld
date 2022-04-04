@@ -8,49 +8,20 @@ using System.Threading.Tasks;
 
 namespace RogueWorld.GUI
 {
-    /// <summary>
-    /// This is the contract that all our GUI classes need to implement.
-    /// It defines a basic window and origin and a set of methods which all GUI can implement.
-    /// </summary>
     internal abstract class GUI
     {
 
         // Position and size
-        private Point _origin;
-        public Point Origin {
-            get { return _origin; }
-            set { _origin = value; }
-        }
-        private Rectangle _window;
-        public Rectangle Window {
-            get { return _window; }
-            set { _window = value; }
+        public Point Origin { get; set; }
+        public Rectangle Window { get; set; }
 
-        }
-
-        // Apperance
-        private char _borderChar;
-        public char BorderChar {
-            get { return _borderChar; }
-            set { _borderChar = value; }
-        }
-        private char _fillingChar;
-        public char FillingChar {
-            get { return _fillingChar; }
-            set { _fillingChar = value; }
-        }
+        // Appearance
+        public char BorderChar { get; set; }
+        public char FillingChar { get; set; }
 
         // Color
-        private ConsoleColor _borderColor;
-        public ConsoleColor BorderColor {
-            get { return _borderColor; }
-            set { _borderColor = value; }
-        }
-        private ConsoleColor _fillingColor;
-        public ConsoleColor FillingColor {
-            get { return _fillingColor; }
-            set { _fillingColor = value; }
-        }
+        public ConsoleColor BorderColor { get; set; }
+        public ConsoleColor FillingColor { get; set; }
 
         public abstract void ClearGUI();
         public abstract void DrawGUI();

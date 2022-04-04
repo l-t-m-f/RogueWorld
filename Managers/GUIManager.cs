@@ -14,6 +14,9 @@ namespace RogueWorld.Managers
 
         public GUI_Stats statsGUI;
 
+        /// <summary>
+        /// Constructor for the GUI Manager.
+        /// </summary>
         public GUIManager() {
 
             statsGUI = new GUI_Stats(GameManager.COLS - 31, GameManager.ROWS - 7, 

@@ -39,8 +39,7 @@ namespace RogueWorld.Managers
         /// the constructor in this exceptional case if PRIVATE. Usually, a constructor is
         /// public.
         /// </summary>
-        private GameManager()
-        {
+        private GameManager() {
 
             UnitManager = new UnitManager();
             TurnManager = new TurnManager();
