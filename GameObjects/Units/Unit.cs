@@ -12,7 +12,8 @@ namespace RogueWorld.GameObjects.Units
     public struct Stats
     {
 
-        public int Health;
+        public int MaxHealth;
+        public int CurrentHealth;
         public int Strength;
         public int Toughness;
         public int Speed;
@@ -46,7 +47,8 @@ namespace RogueWorld.GameObjects.Units
             int intelligenceBonus = 0) {
             Random random = new Random();
 
-            Stats.Health = minHealth + random.Next(10) + healthBonus;
+            Stats.MaxHealth = minHealth + random.Next(10) + healthBonus;
+            Stats.CurrentHealth = Stats.MaxHealth;
             Stats.Strength = minStat + random.Next(10) + strengthBonus;
             Stats.Toughness = minStat + random.Next(10) + toughnessBonus;
             Stats.Speed = minStat + random.Next(10) + speedBonus;

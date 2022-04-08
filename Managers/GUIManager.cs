@@ -21,7 +21,7 @@ namespace RogueWorld.Managers
 
             statsGUI = new GUI_Stats(GameManager.COLS - 31, GameManager.ROWS - 7, 
                 30, 5,
-                'y', '0',
+                'x', ' ',
                 ConsoleColor.Blue, ConsoleColor.Cyan);
 
         }

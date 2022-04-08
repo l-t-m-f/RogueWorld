@@ -90,16 +90,16 @@ namespace RogueWorld.Managers
 
             switch (U.Rogue.Direction) {
                 case Directions.Up:
-                    U.MoveUnitBy(U.Rogue, 0, -1);
+                    U.ActAtOffset(U.Rogue, 0, -1);
                     break;
                 case Directions.Left:
-                    U.MoveUnitBy(U.Rogue, -1, 0);
+                    U.ActAtOffset(U.Rogue, -1, 0);
                     break;
                 case Directions.Down:
-                    U.MoveUnitBy(U.Rogue, 0, 1);
+                    U.ActAtOffset(U.Rogue, 0, 1);
                     break;
                 case Directions.Right:
-                    U.MoveUnitBy(U.Rogue, 1, 0);
+                    U.ActAtOffset(U.Rogue, 1, 0);
                     break;
                 default:
                     break;
@@ -114,7 +114,7 @@ namespace RogueWorld.Managers
             foreach (Unit unit in TurnUnits)
             {
 
-                if (unit.Stats.Health <= 0)
+                if (unit.Stats.CurrentHealth <= 0)
                 {
                     GameManager.Instance.EraseObject(GameManager.Instance.UnitMap,
                     unit);
@@ -143,7 +143,7 @@ namespace RogueWorld.Managers
                         y = random.Next(-1, 2);
                     }
                     
-                    GameManager.Instance.UnitManager.MoveUnitBy(unit, x, y);
+                    GameManager.Instance.UnitManager.ActAtOffset(unit, x, y);
 
             }
         }

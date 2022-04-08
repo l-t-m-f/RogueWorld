@@ -73,7 +73,10 @@ namespace RogueWorld.GUI
                             FillingColor);
                     }
                 }
-            }   
+            }
+
+            Util.Write("Strength", x + 1, y + 1);
+
         }
 
         /// <summary>
