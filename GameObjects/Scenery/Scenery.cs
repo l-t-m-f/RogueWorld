@@ -10,19 +10,8 @@ namespace RogueWorld.GameObjects.Scenery
 {
     public abstract class Scenery : GameObject
     {
-        private int _durability;
-        public int Durability
-        {
-            get { return _durability; }
-            set { _durability = value; }
-        }
-
-        private bool _solidity;
-        public bool Solidity
-        {
-            get { return _solidity; }
-            set { _solidity = value; }
-        }
+        public int Durability { get; set; }
+        public bool Solidity { get; set; }
 
         public Scenery(int x, int y)
         {

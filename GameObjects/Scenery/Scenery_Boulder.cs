@@ -9,8 +9,7 @@ namespace RogueWorld.GameObjects.Scenery
     public class Scenery_Boulder : Scenery
     {
 
-        public Scenery_Boulder(int x, int y) : base(x, y)
-        {
+        public Scenery_Boulder(int x, int y) : base(x, y) {
             Symbol = 'O';
             Name = "Ground";
             Durability = 15;

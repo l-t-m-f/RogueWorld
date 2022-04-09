@@ -1,18 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using RogueWorld.Utilities;
-using RogueWorld.GameObjects;
-using RogueWorld.GameObjects.Scenery;
-using RogueWorld.GameObjects.Units;
-using RogueWorld.GameObjects.Items;
-using System.Drawing;
-
-namespace RogueWorld.Managers
-{
+﻿namespace RogueWorld.Managers {
     internal class GameManager
     {
         // Makes this class into a singleton
@@ -21,43 +7,42 @@ namespace RogueWorld.Managers
 
         public static GameManager Instance { get { return lazy.Value; } }
 
-        // Window size
+
         public const int COLS = 90;
         public const int ROWS = 35;
-
-        // Our various managers, which will be instantiated during the initialization
-        public UnitManager UnitManager;
-        public TurnManager TurnManager;
+        
         public GUIManager GUIManager;
-        // public DrawEngine DrawEngine; This manager has been integrated into the others
-        // public LogsEngine LogsEngine; Moved to GUIManager
+
+        public Unit_Rogue Rogue;
+        public Unit_Kobold Kobold;
+        public Item_FireSword FireSword;
 
 
-        /// <summary>
-        /// CONSTRUCTOR
-        /// Initializes the game manager. Because the manager is meant to be a singleton,
-        /// the constructor in this exceptional case if PRIVATE. Usually, a constructor is
-        /// public.
-        /// </summary>
+        DateTime lastPressedTime = DateTime.MinValue;
+
+        public static ConsoleKey LastKey;
+
+        public List<GameObject> TurnUnits;
+
         private GameManager() {
 
-            UnitManager = new UnitManager();
-            TurnManager = new TurnManager();
-            GUIManager = new GUIManager();
-            //DrawEngine = new DrawEngine();
-            //LogsEngine = new LogsEngine();
+            Rogue = new Unit_Rogue(40, 20);
+            Kobold = new Unit_Kobold(50, 30);
+            FireSword = new Item_FireSword(5, 5);
 
-            var U = UnitManager;
-            var T = TurnManager;
+            TurnUnits = new List<GameObject>();
+            
+            GUIManager = new GUIManager();
 
             InitMap();
 
-            AddObject(UnitMap, U.Rogue);
-            AddObject(UnitMap, U.Kobold);
-            T.ListTurnUnit(U.Kobold);
+            AddObject(UnitMap, Rogue);
+            AddObject(UnitMap, Kobold);
+            ListTurnUnit(Kobold);
             AddObject(SceneryMap, new Scenery_Boulder(10, 20));
             AddObject(SceneryMap, new Scenery_Boulder(17, 21));
             AddObject(SceneryMap, new Scenery_Boulder(20, 15));
+            AddObject(ItemMap, FireSword);
         }
 
         #region World state
@@ -66,21 +51,18 @@ namespace RogueWorld.Managers
         public Unit[,] UnitMap;
         public Item[,] ItemMap;
 
-        /// <summary>
-        /// Initializes three 2-D arrays for holding Units, Scenery and Items respecively.
-        /// Fills the SceneryMap with Scenery_Ground objects.
-        /// </summary>
-        /// <returns></returns>
+        private bool _staticSceneIsDrawn;
+
         internal void InitMap()
         {
 
-            SceneryMap = new Scenery[GameManager.COLS, GameManager.ROWS];
-            UnitMap = new Unit[GameManager.COLS, GameManager.ROWS];
-            ItemMap = new Item[GameManager.COLS, GameManager.ROWS];
+            SceneryMap = new Scenery[COLS, ROWS];
+            UnitMap = new Unit[COLS, ROWS];
+            ItemMap = new Item[COLS, ROWS];
 
-            for (int x = 0; x < GameManager.COLS; x++)
+            for (int x = 0; x < COLS; x++)
             {
-                for (int y = 0; y < GameManager.ROWS; y++)
+                for (int y = 0; y < ROWS; y++)
                 {
                     var newScenery = new Scenery_Ground(x, y);
                     AddObject(SceneryMap, newScenery);
@@ -88,48 +70,19 @@ namespace RogueWorld.Managers
             }
         }
 
-        /// <summary>
-        /// Places a gameObject inside the object map at specific coordinates.
-        /// Because gameObject is a parent of Unit, Scenery and Item, this will work with
-        /// any of our GameObject arrays.
-        /// </summary>
-        /// <param name="objectMap">GameObject array to place the gameObject into.</param>
-        /// <param name="gameObject">GameObject to place into the array.</param>
-        /// <returns></returns>
-        internal int AddObject(GameObject[,] objectMap, GameObject gameObject)
-        {
+        internal int AddObject(GameObject[,] objectMap, GameObject gameObject) {
 
             objectMap[gameObject.PositionX, gameObject.PositionY] = gameObject;
-
             return 0;
         }
 
-        /// <summary>
-        /// Erases a gameObject inside a specific array of the same type.
-        /// Because gameObject is a parent of Unit, Scenery and Item, this will work with
-        /// any of our GameObject arrays.
-        /// </summary>
-        /// <param name="objectMap">GameObject array to remove the gameObject from.</param>
-        /// <param name="gameObject">GameObject to remove from the array.</param>
-        /// <returns></returns>
-        internal int EraseObject(GameObject[,] objectMap, GameObject gameObject)
-        {
+        internal int EraseObject(GameObject[,] objectMap, GameObject gameObject) {
 
             objectMap[gameObject.PositionX, gameObject.PositionY] = null;
             return 0;
         }
 
-        /// <summary>
-        /// Boolean to prevent drawing the whole scenery when its unnecessary.
-        /// Set to true when we use the regular DrawScenery method.
-        /// Set to false when setting the SceneryMap property written a few lines above.
-        /// </summary>
-        private bool _staticSceneIsDrawn;
-
-        /// <summary>
-        /// Method to draw the whole scenery.
-        /// </summary>
-        internal void DrawStaticObjects()
+        internal void DrawAllScenery()
         {
             if (!_staticSceneIsDrawn)
             {
@@ -150,21 +103,155 @@ namespace RogueWorld.Managers
             }
         }
 
-        /// <summary>
-        /// Overloaded version of the DrawScenery method which simply updates one specific coordinate of the scenery.
-        /// Can be used to draw individual scenery game objects.
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        internal void DrawStaticObject(int x, int y)
+        internal void Draw(int x, int y)
         {
-
-
-            if (SceneryMap[x, y] != null)
-            {
-                Util.Write(SceneryMap[x, y].Symbol,
-                    x, y,
+            if (UnitMap[x, y] != null) {
+                Util.Write(UnitMap[x, y].Symbol, x, y,
+                    UnitMap[x, y].FgColor, UnitMap[x, y].BgColor);
+            }
+            else if (ItemMap[x, y] != null) {
+                Util.Write(ItemMap[x, y].Symbol, x, y,
+                    ItemMap[x, y].FgColor, ItemMap[x, y].BgColor);
+            }
+            else if (SceneryMap[x, y] != null) {
+                Util.Write(SceneryMap[x, y].Symbol, x, y,
                     SceneryMap[x, y].FgColor, SceneryMap[x, y].BgColor);
+            }
+        }
+
+        #endregion
+
+        #region Unit Rendering
+
+        internal void DrawAllUnits() {
+            for (int x = 0; x < COLS; x++) {
+                for (int y = 0; y < ROWS - 1; y++) {
+                    if (UnitMap[x, y] != null) {
+                        Util.Write(UnitMap[x, y].Symbol, x, y,
+                            UnitMap[x, y].FgColor, UnitMap[x, y].BgColor);
+                    }
+                }
+            }
+        }
+
+        internal void DrawAllItems() {
+            for (int x = 0; x < COLS; x++) {
+                for (int y = 0; y < ROWS - 1; y++) {
+                    if (ItemMap[x, y] != null) {
+                        Util.Write(ItemMap[x, y].Symbol, x, y,
+                            ItemMap[x, y].FgColor, ItemMap[x, y].BgColor);
+                    }
+                }
+            }
+        }
+
+        internal bool CheckCellForUnit(int x, int y) {
+
+            if (UnitMap[x, y] == null) {
+
+                return false;
+
+            }
+
+            return true;
+        }
+
+        internal bool CheckIfClearIsCell(int x, int y) {
+
+            if (SceneryMap[x, y].Solidity == false) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+
+        #endregion
+
+        #region Turn management
+
+
+        internal int ListTurnUnit(Unit unit) {
+
+            TurnUnits.Add(unit);
+            return 0;
+        }
+
+        public void TakeUserInput() {
+
+            Unit_Rogue player = Rogue;
+            LastKey = Console.ReadKey(true).Key;
+
+            if (DateTime.Now > lastPressedTime.AddSeconds(.01)) {
+                if (Program.GameState == GameState.Menu) {
+
+                    if (LastKey == ConsoleKey.UpArrow) {
+                        GUIManager.DecrementButtonSelection();
+                    } else if (LastKey == ConsoleKey.DownArrow) {
+                        GUIManager.IncrementButtonSelection();
+                    } else if (LastKey == ConsoleKey.Spacebar) {
+                        GUIManager.ActivateButtonSelection();
+                    }
+
+                } else if (Program.GameState == GameState.Continue) {
+                    if (LastKey == ConsoleKey.UpArrow) {
+                        player.Direction = Directions.Up;
+                    } else if (LastKey == ConsoleKey.LeftArrow) {
+                        player.Direction = Directions.Left;
+                    } else if (LastKey == ConsoleKey.DownArrow) {
+                        player.Direction = Directions.Down;
+                    } else if (LastKey == ConsoleKey.RightArrow) {
+                        player.Direction = Directions.Right;
+                    }
+                }
+
+                lastPressedTime = DateTime.Now;
+            }
+        }
+
+        internal void PlayPlayerTurn() {
+
+            switch (Rogue.Direction) {
+
+                case Directions.Up:
+                    Rogue.ActAtOffset(0, -1);
+                    break;
+                case Directions.Left:
+                    Rogue.ActAtOffset(-1, 0);
+                    break;
+                case Directions.Down:
+                    Rogue.ActAtOffset(0, 1);
+                    break;
+                case Directions.Right:
+                    Rogue.ActAtOffset(1, 0);
+                    break;
+                default:
+                    break;
+
+            }
+
+            Rogue.CalculateLOS(Kobold);
+        }
+
+        internal void PlayAITurn() {
+
+            foreach (Unit unit in TurnUnits) {
+
+                var x = 0;
+                var y = 0;
+
+                Random random = new Random();
+
+                if (random.Next(2) == 0) {
+                    random = new Random();
+                    x = random.Next(-1, 2);
+                } else {
+                    random = new Random();
+                    y = random.Next(-1, 2);
+                }
+
+                unit.ActAtOffset(x, y);
+
             }
         }
 

@@ -1,26 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace RogueWorld.GameObjects.Units {
 
-using RogueWorld.Managers;
+    internal class Equipment {
 
-namespace RogueWorld.GameObjects.Units
-{
+        public int ArmorTotal { get; set; }
 
-    public struct Stats
+        public EquipmentSlot HeadSlot;
+        public EquipmentSlot ArmsSlot;
+        public EquipmentSlot BodySlot;
+        public EquipmentSlot LegsSlot;
+        public EquipmentSlot FeetSlot;
+    }
+
+    internal class EquipmentSlot {
+
+        public string SlotName { get; set; }
+        
+        public Item? ItemInSlot { get; set; } 
+
+    }
+
+    internal class Stats
     {
 
         public int MaxHealth;
         public int CurrentHealth;
+
         public int Strength;
         public int Toughness;
         public int Speed;
         public int Intelligence;
     }
 
-    public abstract class Unit : GameObject
+    internal abstract class Unit : GameObject
     {
 
         public Stats Stats;
@@ -34,25 +45,100 @@ namespace RogueWorld.GameObjects.Units
             PositionX = x;
             PositionY = y;
 
-            SetBaseStats(10, 4);
+            Stats = new Stats();
         }
 
-        /// <summary>
-        /// Sets the base stats of the unit. 
-        /// Called as part of the Unit constructor.
-        /// </summary>
-        public void SetBaseStats(int minHealth, int minStat,
-            int healthBonus = 0, int strengthBonus = 0, 
-            int toughnessBonus = 0, int speedBonus = 0, 
-            int intelligenceBonus = 0) {
-            Random random = new Random();
+        public abstract void SetBaseStats(int minHealth, int minStat,
+            int healthBonus = 0, int strengthBonus = 0,
+            int toughnessBonus = 0, int speedBonus = 0,
+            int intelligenceBonus = 0);
 
-            Stats.MaxHealth = minHealth + random.Next(10) + healthBonus;
-            Stats.CurrentHealth = Stats.MaxHealth;
-            Stats.Strength = minStat + random.Next(10) + strengthBonus;
-            Stats.Toughness = minStat + random.Next(10) + toughnessBonus;
-            Stats.Speed = minStat + random.Next(10) + speedBonus;
-            Stats.Intelligence = minStat + random.Next(10) + intelligenceBonus;
+        internal void DealDamageToUnit(int damage) {
+            Stats.CurrentHealth -= damage;
         }
+
+        internal void KillUnit() {
+
+            if (Stats.CurrentHealth == 0) {
+                GameManager.Instance.EraseObject(GameManager.Instance.UnitMap, this);
+                GameManager.Instance.TurnUnits.Remove(this);
+            }
+        }
+
+        internal void ActAtOffset(int x, int y) {
+
+            int newX = PositionX + x;
+            int newY = PositionY + y;
+
+            // Make sur the new position is not "out-of-bounds":
+            if (newX < GameManager.COLS - 1 && newX > 1 &&
+                newY < GameManager.ROWS - 1 && newY > 1) {
+
+                if (this.TryAttack(newX, newY)) {
+
+                    var target = GameManager.Instance.UnitMap[newX, newY];
+                    target.KillUnit();
+
+                } else if (TryMove(newX, newY)) {
+                } else {
+
+                }
+            }
+        }
+
+        internal virtual bool TryMove(int col, int row) {
+
+            if (GameManager.Instance.CheckIfClearIsCell(col, row) == true) {
+
+                // If the new position doesn't contain a unit, check if it contains a solid scenery.
+                // If its clear, allow the movement.
+
+                GameManager.Instance.EraseObject(GameManager.Instance.UnitMap, this);
+                GameManager.Instance.Draw(PositionX, PositionY);
+
+                PositionX = col;
+                PositionY = row;
+
+                GameManager.Instance.AddObject(GameManager.Instance.UnitMap, this);
+                GameManager.Instance.Draw(PositionX, PositionY);
+
+                return true;
+            }
+
+            return false;
+        }
+
+        internal virtual bool TryAttack(int col, int row) {
+
+            var damage = 1;
+            
+            var target = GameManager.Instance.UnitMap[col, row];
+
+            // If new position already contains a unit of the opposing faction.
+            if (GameManager.Instance.CheckCellForUnit(col, row) == true
+            && target.Faction != this.Faction) {
+
+                target.DealDamageToUnit(damage);
+
+                return true;
+
+            }
+
+            return false;
+        }
+
+        internal void CalculateLOS(Unit target) {
+
+            var targetX = target.PositionX;
+            var targetY = target.PositionY;
+
+            var absDistX = Math.Abs(PositionX - targetX);
+            var absDistY = Math.Abs(PositionY - targetY);
+
+            Util.Write("     ", 0, 1, ConsoleColor.DarkGray);
+            Util.Write(absDistX + " " + absDistY, 0, 1, ConsoleColor.DarkGray);
+
+        }
+
     }
 }

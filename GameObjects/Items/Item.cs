@@ -1,12 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RogueWorld.GameObjects.Items
-{
-    internal class Item
+﻿namespace RogueWorld.GameObjects.Items {
+    internal abstract class Item : GameObject
     {
+        public string Name { get; set; }
+        public int Durability { get; set; }
+        public int Attack { get; set; }
+        public int Defense { get; set; }
+
+        public Item(int x, int y) {
+            PositionX = x;
+            PositionY = y;
+        }
+
+        internal void PickItem() {
+
+        }
+
     }
 }

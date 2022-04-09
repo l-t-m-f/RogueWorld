@@ -1,8 +1,18 @@
-﻿using System;
-using RogueWorld.Managers;
+﻿global using System;
+global using System.Collections.Generic;
 
-namespace RogueWorld {
-    internal class Program {
+global using RogueWorld.Managers;
+global using RogueWorld.GameObjects;
+global using RogueWorld.GameObjects.Units;
+global using RogueWorld.GameObjects.Items;
+global using RogueWorld.GameObjects.Scenery;
+global using RogueWorld.Utilities;
+
+namespace RogueWorld
+{
+
+    internal class Program
+    {
 
         public static GameState GameState;
 
@@ -10,30 +20,29 @@ namespace RogueWorld {
             Init();
 
             var GUI = GameManager.Instance.GUIManager;
-            var U = GameManager.Instance.UnitManager;
-            var T = GameManager.Instance.TurnManager;
 
             while (GameState != GameState.GameOver) {
 
                 if(GameState == GameState.Menu) {
 
                     GUI.DrawMenu();
-                    T.TakeUserInput();
+                    GameManager.Instance.TakeUserInput();
 
                 } else if(GameState == GameState.Continue) {
 
-                    GameManager.Instance.DrawStaticObjects();
-                    U.DrawUnits();
+                    GameManager.Instance.DrawAllScenery();
+                    GameManager.Instance.DrawAllItems();
+                    GameManager.Instance.DrawAllUnits();
                     GUI.statsGUI.DrawGUI();
-                    T.TakeUserInput();
-                    T.PlayPlayerTurn();
+                    GameManager.Instance.TakeUserInput();
+                    GameManager.Instance.PlayPlayerTurn();
                     /*
                     if (T.FightResolution())
                     {
                         U.DrawUnits();
                     }
-                    */ 
-                    T.PlayAITurn();
+                    */
+                    GameManager.Instance.PlayAITurn();
                 }
             }
         }
