@@ -1,43 +1,53 @@
-﻿using System;
-using RogueWorld.Managers;
+﻿global using System;
+global using System.Collections.Generic;
+
+global using RogueWorld.Managers;
+global using RogueWorld.GameObjects;
+global using RogueWorld.GameObjects.Units;
+global using RogueWorld.GameObjects.Items;
+global using RogueWorld.GameObjects.Scenery;
+global using RogueWorld.Utilities;
 
 namespace RogueWorld
 {
+
     internal class Program
     {
 
         public static GameState GameState;
 
-        static void Main(string[] args)
-        {
+        static void Main(string[] args) {
             Init();
 
-            while (GameState != GameState.GameOver)
-            {
-                if(GameState == GameState.Menu)
-                {
-                    GameManager.Instance.DrawEngine.DrawMenu();
+            var GUI = GameManager.Instance.GUIManager;
+
+            while (GameState != GameState.GameOver) {
+
+                if(GameState == GameState.Menu) {
+
+                    GUI.DrawMenu();
                     GameManager.Instance.TakeUserInput();
-                }
-                else if(GameState == GameState.Continue)
-                {
-                    GameManager.Instance.DrawEngine.DrawScenery();
-                    GameManager.Instance.DrawEngine.DrawUnits();
+
+                } else if(GameState == GameState.Continue) {
+
+                    GameManager.Instance.DrawAllScenery();
+                    GameManager.Instance.DrawAllItems();
+                    GameManager.Instance.DrawAllUnits();
+                    GUI.statsGUI.DrawGUI();
                     GameManager.Instance.TakeUserInput();
-                    GameManager.Instance.TurnEngine.PlayPlayerTurn();
+                    GameManager.Instance.PlayPlayerTurn();
                     /*
-                    if (GameManager.Instance.TurnEngine.FightResolution())
+                    if (T.FightResolution())
                     {
-                        GameManager.Instance.DrawEngine.DrawUnits();
+                        U.DrawUnits();
                     }
                     */
-                    GameManager.Instance.TurnEngine.PlayAITurn();
+                    GameManager.Instance.PlayAITurn();
                 }
             }
         }
 
-        static void Init()
-        {
+        static void Init() {
             Console.CursorVisible = false;
             GameState = GameState.Menu;
             
