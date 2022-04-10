@@ -4,7 +4,7 @@
 
         public Item_FireSword(int x, int y) : base(x, y) {
             Symbol = 't';
-            Name = "Fire Sword";
+            ItemName = "Fire Sword";
             Durability = 5;
             Defense = 0;
             FgColor = ConsoleColor.Magenta;

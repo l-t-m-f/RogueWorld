@@ -7,7 +7,8 @@
 
         public static GameManager Instance { get { return lazy.Value; } }
 
-
+        public const int WINDOW_W = 108;
+        public const int WINDOW_H = 35;
         public const int COLS = 90;
         public const int ROWS = 35;
         
@@ -26,13 +27,23 @@
 
         private GameManager() {
 
-            Rogue = new Unit_Rogue(40, 20);
-            Kobold = new Unit_Kobold(50, 30);
+            Rogue = new Unit_Rogue(40, 20, 
+                5, 10, 
+                2, 4, 
+                2, 4, 
+                2, 4);
+
+            Kobold = new Unit_Kobold(50, 30,
+                2, 4,
+                1, 2,
+                1, 3,
+                0, 0);
+
             FireSword = new Item_FireSword(5, 5);
 
             TurnUnits = new List<GameObject>();
             
-            GUIManager = new GUIManager();
+            GUIManager = new GUIManager(Rogue);
 
             InitMap();
 
@@ -229,29 +240,51 @@
                     break;
 
             }
-
-            Rogue.CalculateLOS(Kobold);
         }
 
         internal void PlayAITurn() {
 
             foreach (Unit unit in TurnUnits) {
 
-                var x = 0;
-                var y = 0;
-
-                Random random = new Random();
-
-                if (random.Next(2) == 0) {
-                    random = new Random();
-                    x = random.Next(-1, 2);
-                } else {
-                    random = new Random();
-                    y = random.Next(-1, 2);
+                if(unit.CalculateLOS(Rogue) < 8)
+                {
+                    if (unit.PositionY > Rogue.PositionY)
+                    {
+                        unit.ActAtOffset(0, -1);
+                    }
+                    else if (unit.PositionX > Rogue.PositionX)
+                    {
+                        unit.ActAtOffset(-1, 0);
+                    } 
+                    else if (unit.PositionY < Rogue.PositionY)
+                    {
+                        unit.ActAtOffset(0, 1);
+                    } 
+                    else if (unit.PositionX < Rogue.PositionX)
+                    {
+                        unit.ActAtOffset(1, 0);
+                    }
                 }
+                else
+                {
 
-                unit.ActAtOffset(x, y);
+                    var x = 0;
+                    var y = 0;
 
+                    Random random = new Random();
+
+                    if (random.Next(2) == 0)
+                    {
+                        random = new Random();
+                        x = random.Next(-1, 2);
+                    } else
+                    {
+                        random = new Random();
+                        y = random.Next(-1, 2);
+                    }
+
+                    unit.ActAtOffset(x, y);
+                }
             }
         }
 

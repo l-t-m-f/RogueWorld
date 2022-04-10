@@ -19,13 +19,11 @@ namespace RogueWorld
         static void Main(string[] args) {
             Init();
 
-            var GUI = GameManager.Instance.GUIManager;
-
             while (GameState != GameState.GameOver) {
 
                 if(GameState == GameState.Menu) {
 
-                    GUI.DrawMenu();
+                    GameManager.Instance.GUIManager.DrawMenu();
                     GameManager.Instance.TakeUserInput();
 
                 } else if(GameState == GameState.Continue) {
@@ -33,7 +31,7 @@ namespace RogueWorld
                     GameManager.Instance.DrawAllScenery();
                     GameManager.Instance.DrawAllItems();
                     GameManager.Instance.DrawAllUnits();
-                    GUI.statsGUI.DrawGUI();
+                    GameManager.Instance.GUIManager.Update();              
                     GameManager.Instance.TakeUserInput();
                     GameManager.Instance.PlayPlayerTurn();
                     /*
@@ -53,7 +51,7 @@ namespace RogueWorld
             
             if (OperatingSystem.IsWindows())
             {
-                Console.SetWindowSize(GameManager.COLS, GameManager.ROWS);
+                Console.SetWindowSize(GameManager.WINDOW_W, GameManager.WINDOW_H);
                 Console.WriteLine("Set window {0}, {1}", GameManager.COLS, GameManager.ROWS);
             }
 

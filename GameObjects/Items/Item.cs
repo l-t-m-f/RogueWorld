@@ -1,7 +1,7 @@
 ﻿namespace RogueWorld.GameObjects.Items {
     internal abstract class Item : GameObject
     {
-        public string Name { get; set; }
+        public string ItemName { get; set; }
         public int Durability { get; set; }
         public int Attack { get; set; }
         public int Defense { get; set; }

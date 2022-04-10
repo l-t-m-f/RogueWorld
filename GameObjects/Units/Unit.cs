@@ -19,47 +19,90 @@
 
     }
 
-    internal class Stats
+    internal class States
+    {
+        public int Burning { get; set; }
+        public int Frozen { get; set; }
+        public int Poisoned { get; set; }
+        public int Soaked { get; set; }
+
+        public States()
+        {
+            Burning = 0;
+            Frozen = 0;
+            Poisoned = 0;
+            Soaked = 0;
+        }
+    }
+
+    internal class Attributes
     {
 
-        public int MaxHealth;
-        public int CurrentHealth;
+        public int MaxHealth { get; set; }
+        public int CurrentHealth { get; set; }
+        public int MaxStrength { get; set; }
+        public int CurrentStrength { get; set; }
+        public int MaxSpeed { get; set; }
+        public int CurrentSpeed { get; set; }
+        public int MaxIntelligence { get; set; }
+        public int CurrentIntelligence { get; set; }
 
-        public int Strength;
-        public int Toughness;
-        public int Speed;
-        public int Intelligence;
+        //Removed toughness, we'll deal with it somewhere else (equipment).
+
+        public Attributes(int minHealth, int maxHealth,
+            int minStrength, int maxStrength,
+            int minSpeed, int maxSpeed,
+            int minIntelligence, int maxIntelligence)
+        {
+            Random random = new();
+
+            MaxHealth = 4 + random.Next(minHealth, maxHealth + 1);
+            MaxStrength = 1 + random.Next(minStrength, maxStrength + 1);
+            MaxSpeed = 1 + random.Next(minSpeed, maxSpeed + 1);
+            MaxIntelligence = 1 + random.Next(minIntelligence, maxIntelligence + 1);
+
+            CurrentHealth = MaxHealth;
+            CurrentStrength = MaxStrength;
+            CurrentSpeed = MaxSpeed;
+            CurrentIntelligence = MaxIntelligence;
+        }
+
     }
 
     internal abstract class Unit : GameObject
     {
 
-        public Stats Stats;
+        public Attributes Attributes;
+
+        public States States;
 
         public int Faction;
 
         public Directions Direction;
 
-        public Unit(int x, int y)
+        public Unit(int x, int y,
+            int minHealth, int maxHealth,
+            int minStrength, int maxStrength,
+            int minSpeed, int maxSpeed,
+            int minIntelligence, int maxIntelligence)
         {
             PositionX = x;
             PositionY = y;
 
-            Stats = new Stats();
+            Attributes = new(minHealth, maxHealth,
+                minStrength, maxStrength,
+                minSpeed, maxSpeed,
+                minIntelligence, maxIntelligence);
+            States = new();
         }
 
-        public abstract void SetBaseStats(int minHealth, int minStat,
-            int healthBonus = 0, int strengthBonus = 0,
-            int toughnessBonus = 0, int speedBonus = 0,
-            int intelligenceBonus = 0);
-
         internal void DealDamageToUnit(int damage) {
-            Stats.CurrentHealth -= damage;
+            Attributes.CurrentHealth -= damage;
         }
 
         internal void KillUnit() {
 
-            if (Stats.CurrentHealth == 0) {
+            if (Attributes.CurrentHealth == 0) {
                 GameManager.Instance.EraseObject(GameManager.Instance.UnitMap, this);
                 GameManager.Instance.TurnUnits.Remove(this);
             }
@@ -127,7 +170,7 @@
             return false;
         }
 
-        internal void CalculateLOS(Unit target) {
+        internal int CalculateLOS(Unit target) {
 
             var targetX = target.PositionX;
             var targetY = target.PositionY;
@@ -135,8 +178,7 @@
             var absDistX = Math.Abs(PositionX - targetX);
             var absDistY = Math.Abs(PositionY - targetY);
 
-            Util.Write("     ", 0, 1, ConsoleColor.DarkGray);
-            Util.Write(absDistX + " " + absDistY, 0, 1, ConsoleColor.DarkGray);
+            return absDistX + absDistY;
 
         }
 

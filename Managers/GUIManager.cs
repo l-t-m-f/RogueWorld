@@ -13,16 +13,38 @@ namespace RogueWorld.Managers
     {
 
         public GUI_Stats statsGUI;
+        public GUI_Equipment equipmentGUI;
+        public GUI_ActiveItem activeItemGUI1;
+        public GUI_ActiveItem activeItemGUI2;
+        public Unit_Rogue Player { get; set; }
 
         /// <summary>
         /// Constructor for the GUI Manager.
         /// </summary>
-        public GUIManager() {
+        public GUIManager(Unit_Rogue player)
+        {
 
-            statsGUI = new GUI_Stats(GameManager.COLS - 31, GameManager.ROWS - 7, 
-                30, 5,
+            Player = player;
+
+            statsGUI = new GUI_Stats(GameManager.COLS, 0, 
+                18, 10,
                 'x', ' ',
                 ConsoleColor.Blue, ConsoleColor.Cyan);
+
+            equipmentGUI = new GUI_Equipment(GameManager.COLS, 11,
+                18, 10,
+                'x', ' ',
+                ConsoleColor.Blue, ConsoleColor.Cyan);
+
+            activeItemGUI1 = new GUI_ActiveItem(GameManager.COLS + 1, 22,
+                8, 8,
+                ' ', 'o',
+                ConsoleColor.Black, ConsoleColor.DarkYellow);
+
+            activeItemGUI2 = new GUI_ActiveItem(GameManager.COLS + 9, 22,
+                8, 8,
+                ' ', 'o',
+                ConsoleColor.Black, ConsoleColor.DarkYellow);
 
         }
 
@@ -33,6 +55,14 @@ namespace RogueWorld.Managers
         readonly int xOffset = 10;
 
         public List<MenuButton> buttons;
+
+        internal void Update()
+        {
+            statsGUI.DrawGUI();
+            equipmentGUI.DrawGUI();
+            activeItemGUI1.DrawGUI();
+            activeItemGUI2.DrawGUI();
+        }
 
         public struct MenuButton
         {
