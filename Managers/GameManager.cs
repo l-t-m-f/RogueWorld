@@ -190,6 +190,8 @@
 
         public void TakeUserInput() {
 
+            Rogue.Direction = Directions.None;
+
             Unit_Rogue player = Rogue;
             LastKey = Console.ReadKey(true).Key;
 
@@ -240,13 +242,37 @@
                     break;
 
             }
+
+            Rogue.UpdateColorBasedOnHealth();
         }
 
         internal void PlayAITurn() {
 
             foreach (Unit unit in TurnUnits) {
 
-                if(unit.CalculateLOS(Rogue) < 8)
+
+                if(Rogue.PositionX == unit.PositionX &&
+                    Rogue.PositionY == unit.PositionY - 1)
+                {
+                    unit.TryAttack(unit.PositionX, unit.PositionY - 1);
+                } 
+                else if (Rogue.PositionX == unit.PositionX - 1 &&
+                    Rogue.PositionY == unit.PositionY)
+                {
+                    unit.TryAttack(unit.PositionX - 1, unit.PositionY);
+                } 
+                else if (Rogue.PositionX == unit.PositionX && 
+                    Rogue.PositionY == unit.PositionY + 1)
+                {
+                    unit.TryAttack(unit.PositionX, unit.PositionY + 1);
+                } 
+                else if (Rogue.PositionX == unit.PositionX + 1 &&
+                    Rogue.PositionY == unit.PositionY)
+                {
+                    unit.TryAttack(unit.PositionX + 1, unit.PositionY);
+                }
+
+                else if (unit.CalculateLOS(Rogue) < 8)
                 {
                     if (unit.PositionY > Rogue.PositionY)
                     {
@@ -287,6 +313,8 @@
                 }
             }
         }
+
+        
 
         #endregion
 

@@ -33,13 +33,7 @@ namespace RogueWorld
                     GameManager.Instance.DrawAllUnits();
                     GameManager.Instance.GUIManager.Update();              
                     GameManager.Instance.TakeUserInput();
-                    GameManager.Instance.PlayPlayerTurn();
-                    /*
-                    if (T.FightResolution())
-                    {
-                        U.DrawUnits();
-                    }
-                    */
+                    GameManager.Instance.PlayPlayerTurn(); 
                     GameManager.Instance.PlayAITurn();
                 }
             }
@@ -68,6 +62,7 @@ namespace RogueWorld
 
     public enum Directions
     {
+        None,
         Up,
         Left,
         Down,

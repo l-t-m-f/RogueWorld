@@ -24,6 +24,28 @@ namespace RogueWorld.GameObjects.Units
             Name = "Player";
         }
 
+        internal void UpdateColorBasedOnHealth()
+        {
+            
+
+            if (Attributes.CurrentHealth == Attributes.MaxHealth)
+            {
+                FgColor = ConsoleColor.White;
+            } 
+            else if (Attributes.CurrentHealth < 0.25f * Attributes.MaxHealth)
+            {
+                FgColor = ConsoleColor.Red;
+
+            } 
+            else if (Attributes.CurrentHealth < 0.5f * Attributes.MaxHealth)
+            {
+                FgColor = ConsoleColor.Yellow;
+
+            } else {
+                FgColor = ConsoleColor.Green;
+            }
+        }
+
         internal override bool TryMove(int col, int row) {
 
             if (GameManager.Instance.CheckIfClearIsCell(col, row) == true) {
